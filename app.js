@@ -5,9 +5,18 @@ const bodyParser = require("body-parser");
 const date = require(__dirname + "/date.js");
 const mongoose= require("mongoose");
 const _=require("lodash")
+const PORT=process.env.PORT || 3000
+
+ const connectionParams={
+   useNewUrlParser: true,
+    useUnifiedTopology: true,
+ };
+
+let uri="mongodb+srv://agrawalaman977:Qwerty%40123@todolist.z5csbpt.mongodb.net/todolistDB?retryWrites=true&w=majority"
+
 
 mongoose.set("strictQuery", false);
-mongoose.connect("mongodb+srv://agrawalaman977:Qwerty@123@todolist.z5csbpt.mongodb.net/?retryWrites=true&w=majority/todolistDB", ()=> {
+mongoose.connect(uri, connectionParams).then( ()=> {
     console.log("connected");
 });
 
@@ -61,7 +70,6 @@ const List=mongoose.model("List", listSchema)
 const day = date.getDate();
 app.get("/", function(req, res) {
 
-  
   Item.find({}, function(err, foundItems){
     if(foundItems.length===0){
       Item.insertMany(defaultItems, function(err){
@@ -172,6 +180,6 @@ app.post("/delete", function(req,res){
 //   res.render("about");
 // });
 
-app.listen(3000, function() {
+app.listen(PORT, function() {
   console.log("Server started on port 3000");
 });
